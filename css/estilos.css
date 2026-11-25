@@ -19,38 +19,29 @@
 
 /* ========== 1. TOKENS DE LA MARCA ========== */
 :root {
-  /* Ejemplo resuelto */
   --eje-primario: #1f5f3a;   /* verde cafetal · botones y acentos  */
+  --eje-secundario: #4a2c1a; /* café oscuro   · navbar y pie       */
   --eje-fondo: #faf6ee;      /* crema         · fondo de la página */
+  --eje-texto: #2b2118;      /* café muy oscuro · texto general    */
+  --eje-fuente: "Segoe UI", system-ui, sans-serif;
   --eje-radio: 0.75rem;
 
-  /* TODO G1.1 - Define los tokens que faltan (colores en hex de 6 dígitos):
-   *   --eje-secundario  -> color oscuro para navbar y pie (texto blanco encima, contraste ≥ 4.5:1)
-   *   --eje-texto       -> color del texto general (sobre --eje-fondo, contraste ≥ 4.5:1)
-   *   --eje-fuente      -> pila de fuentes, ej: "Segoe UI", system-ui, sans-serif
-   * Comprueba el contraste en https://webaim.org/resources/contrastchecker/
-   */
-
-  /* Colores de categoría (badges), ya resueltos */
+  /* Colores de categoría (badges) */
   --eje-naturaleza: #2e6b30;
   --eje-cultura: #6a3d8f;
   --eje-cafe: #6f4e37;
   --eje-aventura: #a33a17;
 
   /* ========== 2. BOOTSTRAP USA NUESTROS TOKENS ========== */
-  /* Ejemplo resuelto */
   --bs-body-bg: var(--eje-fondo);
+  --bs-body-color: var(--eje-texto);
+  --bs-body-font-family: var(--eje-fuente);
   --bs-border-radius: var(--eje-radio);
-
-  /* TODO G1.2 - Haz que Bootstrap use tu texto y tu fuente:
-   *   --bs-body-color       -> var(--eje-texto)
-   *   --bs-body-font-family -> var(--eje-fuente)
-   */
 }
 
 /* ========== 3. COMPONENTES ========== */
 
-/* Ejemplo resuelto: Botón principal (hero)
+/* Botón principal (hero)
  * Cada componente de Bootstrap tiene SUS PROPIAS variables (--bs-btn-...).
  * Cambiar --bs-primary no basta: hay que sobrescribirlas en el componente. */
 .btn-primary {
@@ -61,17 +52,17 @@
   --bs-btn-active-bg: var(--eje-secundario);
 }
 
-/* TODO G1.3 - Botones de filtro (btn-group).
- * Asigna var(--eje-primario) a estas variables de .btn-outline-primary:
- *   --bs-btn-color, --bs-btn-border-color, --bs-btn-hover-bg,
- *   --bs-btn-hover-border-color, --bs-btn-active-bg, --bs-btn-active-border-color
- * Experimenta: en DevTools selecciona un botón de filtro -> pestaña Computed -> busca --bs-btn-color.
- */
+/* Botones de filtro (btn-group) */
 .btn-outline-primary {
-
+  --bs-btn-color: var(--eje-primario);
+  --bs-btn-border-color: var(--eje-primario);
+  --bs-btn-hover-bg: var(--eje-primario);
+  --bs-btn-hover-border-color: var(--eje-primario);
+  --bs-btn-active-bg: var(--eje-primario);
+  --bs-btn-active-border-color: var(--eje-primario);
 }
 
-/* Navbar y pie (se ven transparentes hasta que definas --eje-secundario) */
+/* Navbar y pie */
 .navbar-eje,
 .pie-eje {
   background-color: var(--eje-secundario);
