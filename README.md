@@ -6,7 +6,7 @@ y se pueden filtrar por tipo y buscar por nombre o municipio.
 
 - **Aprendiz:** juan esteban marin arias
 - **Ficha:** 3349882 · Tecnólogo en Análisis y Desarrollo de Software · SENA CDITI
-- **Sitio publicado (GitHub Pages):** https://github.com/Juanmarin2007/rutas-eje-cafetero.git
+- **Sitio publicado (GitHub Pages):** https://juanmarin2007.github.io/rutas-eje-cafetero/
 
 - **Lo que aprendí:** ver [APRENDIZAJES.md](APRENDIZAJES.md)
 
