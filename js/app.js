@@ -1,13 +1,6 @@
 /*
  * app.js - Rutas del Eje
- * ------------------------------------------------------------
- * Flujo de la interfaz: DATOS (datos.js) -> TARJETAS (HTML) -> EVENTOS
- *
- *   rutas -> filtrarPorTipo() -> buscarPorTexto() -> pintarRutas() -> #lista-rutas
- *
- * Los eventos (clic en un filtro, escribir en el buscador) cambian el estado
- * y vuelven a ejecutar ese recorrido.
- *
+ * Flujo: rutas -> filtrarPorTipo() -> buscarPorTexto() -> ordenarRutas() -> pintarRutas()
  * Verifica tu avance con:  node --test
  */
 
@@ -18,8 +11,6 @@ const ETIQUETAS_TIPO = {
   aventura: 'Aventura'
 };
 
-/* RESUELTA 1 · formatearPrecio(valor)
- * Convierte 25000 en "$ 25.000". Si el precio es 0, devuelve "Gratis". */
 function formatearPrecio(valor) {
   if (valor === 0) return 'Gratis';
   return new Intl.NumberFormat('es-CO', {
@@ -29,8 +20,6 @@ function formatearPrecio(valor) {
   }).format(valor);
 }
 
-/* RESUELTA 2 · normalizar(texto)
- * Minúsculas, sin tildes y sin espacios a los lados. */
 function normalizar(texto) {
   return texto
     .toLowerCase()
@@ -39,7 +28,6 @@ function normalizar(texto) {
     .trim();
 }
 
-/* G3.1 · crearCard(ruta) -> string con el HTML de UNA tarjeta */
 function crearCard(ruta) {
   return `
     <div class="col">
@@ -59,7 +47,6 @@ function crearCard(ruta) {
     </div>`;
 }
 
-/* G3.2 · pintarRutas(lista, contenedor, mensaje) */
 function pintarRutas(lista, contenedor, mensaje) {
   contenedor.innerHTML = lista.map(crearCard).join('');
 
@@ -70,13 +57,11 @@ function pintarRutas(lista, contenedor, mensaje) {
   }
 }
 
-/* G4.1 · filtrarPorTipo(lista, tipo) -> nuevo arreglo */
 function filtrarPorTipo(lista, tipo) {
   if (tipo === 'todos') return [...lista];
   return lista.filter((ruta) => ruta.tipo === tipo);
 }
 
-/* G4.2 · buscarPorTexto(lista, texto) -> nuevo arreglo */
 function buscarPorTexto(lista, texto) {
   const buscado = normalizar(texto);
   if (buscado === '') return [...lista];
@@ -87,29 +72,33 @@ function buscarPorTexto(lista, texto) {
   );
 }
 
-/* RETO · ordenarRutas(lista, criterio) -> nuevo arreglo ordenado
- * Enunciado completo, rúbrica y enlaces de consulta en RETO.md.
- * Tus pruebas van en tests/reto.test.js. */
+/* RETO · ordenarRutas(lista, criterio) -> nuevo arreglo ordenado */
 function ordenarRutas(lista, criterio) {
-  // TODO: implementar (RETO)
+  const copia = [...lista]; // sort() modifica el arreglo, por eso se ordena una copia
+  if (criterio === 'nombre') {
+    return copia.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+  }
+  if (criterio === 'precio') {
+    return copia.sort((a, b) => a.precio - b.precio);
+  }
+  if (criterio === 'duracion') {
+    return copia.sort((a, b) => a.duracionHoras - b.duracionHoras);
+  }
+  return copia;
 }
 
-/* Estado de la interfaz + aplicarFiltros()  (ya resuelto) */
-const estado = { tipo: 'todos', texto: '' };
+const estado = { tipo: 'todos', texto: '', orden: '' };
 
 function aplicarFiltros() {
-  // ?? rutas -> mientras una función no esté implementada (devuelve undefined), se usan todas las rutas
   let resultado = filtrarPorTipo(rutas, estado.tipo) ?? rutas;
   resultado = buscarPorTexto(resultado, estado.texto) ?? resultado;
-  // RETO: aquí también se aplica ordenarRutas(resultado, estado.orden)
+  resultado = ordenarRutas(resultado, estado.orden) ?? resultado;
   pintarRutas(resultado, document.querySelector('#lista-rutas'), document.querySelector('#resultado'));
 }
 
-/* G4.3 · iniciar() - conecta los EVENTOS */
 function iniciar() {
   const botones = document.querySelectorAll('[data-tipo]');
 
-  // Paso 1: eventos 'click' de los botones de filtro
   botones.forEach((boton) => {
     boton.addEventListener('click', () => {
       estado.tipo = boton.dataset.tipo;
@@ -121,17 +110,21 @@ function iniciar() {
     });
   });
 
-  // Paso 2: evento 'input' del buscador
   const buscador = document.querySelector('#buscador');
   buscador.addEventListener('input', (evento) => {
     estado.texto = evento.target.value;
     aplicarFiltros();
   });
 
-  aplicarFiltros(); // pinta todas las rutas al cargar
+  const selectOrden = document.querySelector('#orden');
+  selectOrden.addEventListener('change', (evento) => {
+    estado.orden = evento.target.value;
+    aplicarFiltros();
+  });
+
+  aplicarFiltros();
 }
 
-// En el navegador arranca la app; en Node (pruebas) exporta las funciones.
 if (typeof document !== 'undefined') iniciar();
 if (typeof module !== 'undefined') {
   module.exports = { formatearPrecio, normalizar, crearCard, pintarRutas, filtrarPorTipo, buscarPorTexto, ordenarRutas };
